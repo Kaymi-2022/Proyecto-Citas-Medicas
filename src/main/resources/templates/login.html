@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesion Sitema de citas</title>
+    <style>
+      body,
+      html {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+
+        color: blue;
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-between;
+        height: 100vh;
+      }
+      .login-container {
+        width: 50%;
+        background-color: #e5f4fc;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+      }
+
+      header {
+        padding: 5px;
+      }
+      nav {
+        display: flex;
+        flex-direction: row;
+        align-items: last baseline;
+        width: 100%;
+        justify-content: space-evenly;
+        margin-top: 25px;
+      }
+
+      .nav {
+        color: #3c3c9985;
+        background-color: #e5f4fc;
+        width: 80%;
+        font-size: 20px;
+        margin-top: 5px;
+        transition: text-decoration 0.5s ease-in-out;
+      }
+      .form {
+        display: flex;
+        flex-direction: column;
+      }
+      .Container-form {
+        margin: 10%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .nav:hover {
+        background-color: #e5f4fc;
+        text-decoration: underline;
+        text-decoration-color: blue;
+        cursor: pointer;
+        color: blue;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+        width: 70%;
+      }
+      input,
+      select {
+        width: 100%;
+        height: 35px;
+        border: none;
+        box-sizing: border-box;
+      }
+
+      .remember {
+        display: flex;
+        flex-direction: row;
+        padding: 2px;
+        align-items: center;
+      }
+      button {
+        background-color: #c5d1eb;
+        height: 35px;
+        margin-bottom: 15px;
+        color: black;
+        border-radius: 5px;
+        border: #c5d1eb;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      #signup-form {
+        font-size: 13px;
+      }
+      .container-label-3 {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        justify-content: space-between;
+      }
+      .info-container {
+        background-image: url("https://img.freepik.com/vector-gratis/composicion-medicina-linea-imagen-paciente-estomago-medico-telefono-inteligente_1284-54429.jpg");
+        background-size: cover;
+        width: 50%;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login-container">
+        <header th:replace="layout/plantilla :: header"></header>
+        <nav>
+          <button class="nav" id="login-btn">Iniciar sesión</button>
+          <button class="nav" id="signup-btn">Registrarse</button>
+        </nav>
+        <form id="login-form" class="form" method="POST" th:action="@{/login}">
+          <div class="Container-form">
+            <div class="input-group">
+              <label for="username">Username:</label>
+              <input type="text" name="username" id="username" required />
+            </div>
+            <div class="input-group">
+              <label for="password">Password:</label>
+              <input type="password" name="password" id="password" required />
+            </div>
+            <div class="remember">
+              <input type="checkbox" id="remember-me" />
+              <label for="remember-me">Recordar</label>
+            </div>
+            <button type="submit" value="Login">Ingresar</button>
+            <button type="button" id="recover-password">
+              Recuperar contraseña
+            </button>
+          </div>
+        </form>
+        <form id="signup-form" class="form" style="display: none">
+          <div class="Container-form">
+            <div class="container-label-3">
+              <div class="input-group">
+                <label for="new-document-type">Tipo de documento</label>
+                <select id="new-document-type">
+                  <option value="DNI">DNI</option>
+                  <!-- Agrega más opciones según sea necesario -->
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="new-num-dni">Numero Documento</label>
+                <input type="text" id="new-num-dni" required />
+              </div>
+            </div>
+            <div class="container-label-3">
+              <div class="input-group">
+                <label for="new-name">Nombre</label>
+                <input type="text" id="new-name" required />
+              </div>
+              <div class="input-group">
+                <label for="new-lastname1">Apellido Paterno</label>
+                <input type="password" id="new-lastname1" required />
+              </div>
+              <div class="input-group">
+                <label for="new-lastname2">Apellido Materno</label>
+                <input type="password" id="new-lastname2" required />
+              </div>
+            </div>
+            <div class="container-label-3">
+              <div class="input-group">
+                <label for="new-cel">Numero Celular</label>
+                <input type="text" id="new-cel" required />
+              </div>
+              <div class="input-group">
+                <label for="new-mail">Email</label>
+                <input type="text" id="new-mail" required />
+              </div>
+            </div>
+            <div class="container-label-3">
+              <div class="input-group">
+                <label for="new-user">Usuario</label>
+                <input type="text" id="new-user" required />
+              </div>
+              <div class="input-group">
+                <label for="new-password">Contraseña</label>
+                <input type="password" id="new-password" required />
+              </div>
+            </div>
+            <button type="submit">Registrarse</button>
+          </div>
+        </form>
+      </div>
+      <div class="info-container">
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("login-btn")
+        .addEventListener("click", function () {
+          document.getElementById("login-form").style.display = "block";
+          document.getElementById("signup-form").style.display = "none";
+        });
+
+      document
+        .getElementById("signup-btn")
+        .addEventListener("click", function () {
+          document.getElementById("login-form").style.display = "none";
+          document.getElementById("signup-form").style.display = "block";
+        });
+    </script>
+  </body>
+</html>
+
