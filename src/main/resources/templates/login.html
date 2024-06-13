@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="/css/style-login.css" />
+</head>
+
+<body>
+  <div class="contenedor">
+    <div class="hijo">
+      <div class="login-info col-md-6 justify-content-center">
+        <img src="https://img.freepik.com/vector-gratis/concepto-medico-linea_23-2148524281.jpg" alt="UTP+Class"
+          height="470px" width="400px" />
+      </div>
+      <div class="form">
+        <ul class="tab-group">
+          <li class="tab active"><a href="#signup">Registrarse</a></li>
+          <li class="tab"><a href="#login">Ingresar</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="signup">
+            <h1>Crear Cuenta</h1>
+
+            <form th:action="@{/register}" method="POST">
+              <div class="top-row">
+                <div class="field-wrap">
+                  <label> First Name<span class="req">*</span> </label>
+                  <input type="text" name="nombre" required autocomplete="off" />
+                </div>
+
+                <div class="field-wrap">
+                  <label> Last Name<span class="req">*</span> </label>
+                  <input type="text" name="apellido" required autocomplete="off" />
+                </div>
+              </div>
+              <div class="top-row">
+                <div class="field-wrap">
+                  <label> DNI<span class="req">*</span> </label>
+                  <input type="text" name="dni" required autocomplete="off" />
+                </div>
+
+                <div class="field-wrap">
+                  <label> CELULAR<span class="req">*</span> </label>
+                  <input type="tel" name="celular" required autocomplete="off" />
+                </div>
+              </div>
+
+              <div class="field-wrap">
+                <label> Email Address<span class="req">*</span> </label>
+                <input type="email" name="correo" required autocomplete="off" />
+              </div>
+
+              <div class="field-wrap">
+                <label> User Name<span class="req">*</span> </label>
+                <input type="text" name="username" required autocomplete="off" />
+              </div>
+
+              <div class="field-wrap">
+                <label> Set A Password<span class="req">*</span> </label>
+                <input type="password" name="password" required autocomplete="off" />
+              </div>
+
+              <input type="submit" value="Get into" class="button button-block" />
+            </form>
+
+          </div>
+
+          <div id="login">
+            <h1>Bienvenido!</h1>
+
+            <form th:action="@{/login}" method="POST">
+              <div class="field-wrap">
+                <label> Username<span class="req">*</span> </label>
+                <input type="text" required autocomplete="off" name="username" id="username" />
+              </div>
+
+              <div class="field-wrap">
+                <label> Password<span class="req">*</span> </label>
+                <input type="password" required autocomplete="off" name="password" id="password" />
+              </div>
+
+              <p class="forgot"><a href="#">Forgot Password?</a></p>
+
+              <input type="submit" class="button button-block" value="Log In" />
+            </form>
+          </div>
+        </div>
+        <!-- tab-content -->
+      </div>
+      <!-- /form -->
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/js-login.js"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    var respuesta = /*[[${situacion}]]*/ "defaultValue";
+    console.log("Valor desde Thymeleaf:", respuesta);
+    /*]]>*/
+    if (respuesta == "error") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Usuario o contraseña incorrectos!",
+      });
+    }else if (respuesta == "success") {
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido!",
+        text: "Ingreso exitoso!",
+      });
+    }else if (respuesta == "errorRegister") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error al registrar!",
+      });
+    }else if (respuesta == "successRegister") {
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido!",
+        text: "Registro exitoso!",
+      });
+    }
+
+  </script>
+</body>
+
+</html>
