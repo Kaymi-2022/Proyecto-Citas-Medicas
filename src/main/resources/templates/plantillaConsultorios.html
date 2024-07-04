@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <title>Especialidad</title>
+    <style>
+        .card {
+            margin: 10px 0;
+        }
+        .card-img-button {
+            border: none;
+            background: none;
+            padding: 0;
+        }
+        .card-img-button img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<header class="bg-primary text-white text-center py-3">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Aplicación de Citas</h1>
+            <div class="dropdown">
+                <i class="fas fa-user" id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false"></i>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <p class="dropdown-item">Usuario: <span th:text="${username}">NombreUsuario</span></p>
+                    <a class="dropdown-item" href="#">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container mt-5">
+    <h2>Especialidades Disponibles</h2>
+    <p>Usuario conectado: <span th:text="${valor}">NombreUsuario</span></p>
+
+    <div class="row">
+        <!-- Iterar sobre la lista de consultorios -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="consultorio, iter : ${consultorios}">
+            <form action="/otraPagina" method="get">
+                <input type="hidden" name="valor" th:value="${consultorio.idConsultorio}"/>
+                <button type="submit" class="card-img-button">
+                    <div class="card">
+                        <img th:src="@{|/img/default-image.jpg|}" class="card-img-top"
+                             th:alt="${consultorio.idConsultorio}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" th:text="${consultorio.nombre}">Nombre</h5>
+                            <p class="card-text">Descripción de la especialidad</p>
+                        </div>
+                    </div>
+                </button>
+            </form>
+            <form action="/otraPagina" method="get">
+                <input type="hidden" name="valor" th:value="${consultorio.idConsultorio}"/>
+                <button type="submit" class="card-img-button">
+                    <div class="card">
+                        <img th:src="@{|/${consultorio.idConsultorio}/foto|}" class="card-img-top"
+                             th:alt="${consultorio.idConsultorio}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" th:text="${consultorio.nombre}">Nombre</h5>
+                            <p class="card-text">Descripción de la especialidad</p>
+                        </div>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light text-center py-3">
+    <p>Privacidad y términos comunes</p>
+</footer>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
