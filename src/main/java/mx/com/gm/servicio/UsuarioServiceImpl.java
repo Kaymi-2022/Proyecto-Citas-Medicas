@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import mx.com.gm.domain.Rol;
 import mx.com.gm.domain.Usuario;
-import mx.com.gm.repository.RolRepository;
+import mx.com.gm.repository.RolDao;
 import mx.com.gm.repository.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +24,7 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
     public UsuarioDao usuarioDao;
 
     @Autowired
-    private RolRepository rolRepository;
+    private RolDao rolDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -43,7 +43,6 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
 
         return new User(usuario.getUsername(), usuario.getPassword(), roles);
     }
-
     @Override
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
@@ -75,13 +74,13 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
     @Transactional
     public Usuario registrarUsuario(Usuario usuario) {
         // Asegúrate de que el rol "ROLE_PATIENT" existe o créalo si no existe
-        Optional<Rol> rolPacienteOpt = rolRepository.findByNombre("ROLE_PATIENT");
+        Optional<Rol> rolPacienteOpt = rolDao.findByNombre("ROLE_PATIENT");
         Rol rolPaciente;
         
         if (rolPacienteOpt.isEmpty()) {
             rolPaciente = new Rol();
             rolPaciente.setNombre("ROLE_PATIENT");
-            rolPaciente = rolRepository.save(rolPaciente);
+            rolPaciente = rolDao.save(rolPaciente);
         } else {
             rolPaciente = rolPacienteOpt.get();
         }
@@ -101,5 +100,15 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
     public List<Object[]> findAllUsersWithRoleNames() {
         return usuarioDao.findAllUsersWithRoleNames();
     }
-    
+
+    // Método adicional para obtener el nombre del usuario
+    public String getNombre(String username) {
+        Usuario usuario = usuarioDao.findByUsername(username);
+
+        return usuario != null ? usuario.getNombre() : null;
+    }
+    // Método adicional para obtener el id del usuario
+    public Usuario getUsuario(String username) {
+        return usuarioDao.findByUsernameNative(username);
+    }
 }

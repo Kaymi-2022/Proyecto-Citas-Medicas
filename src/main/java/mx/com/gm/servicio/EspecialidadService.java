@@ -5,7 +5,7 @@ import mx.com.gm.domain.Especialidad;
 import java.util.List;
 import java.util.Optional;
 
-public interface ConsultorioService {
+public interface EspecialidadService {
 
     public void guardar(Especialidad especialidad);
 

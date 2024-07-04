@@ -2,28 +2,34 @@ package mx.com.gm.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
 @Entity
 @Data
 @AllArgsConstructor
-@Table(name = "citas")
-public class Citas {
+@NoArgsConstructor
+@Table(name = "horarios")
+public class Horarios {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private LocalDate date;
+    @NotNull(message = "El día no puede ser nulo")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dia;
 
-    @NotNull
+    @NotNull(message = "La hora no puede ser nula")
     private LocalTime time;
 
     @ManyToOne
     @JoinColumn(name = "idestadoCita")
+    @NotNull(message = "El estado de la cita no puede ser nulo")
     private EstadoCita idestadoCita;
 
     @ManyToOne

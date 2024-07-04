@@ -9,8 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UsuarioDao extends JpaRepository<Usuario, Long> {
-
+    // Obtener el nombre usuario por su name de usuario
     Usuario findByUsername(String username);
+
+    // Obtner el todos sus datospor su nombre de usuario
+    @Query("SELECT u FROM Usuario  u WHERE username = :username")
+    Usuario findByUsernameNative(@Param("username") String username);
 
     @Query("SELECT COUNT(u) FROM Usuario u JOIN u.roles r WHERE r.nombre = :rolNombre")
     long countByRoleName(@Param("rolNombre") String rolNombre);

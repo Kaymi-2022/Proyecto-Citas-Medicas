@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>mx.com.gm</groupId>
-    <artifactId>ControlClentes</artifactId>
+    <artifactId>ControlClientes</artifactId>
     <version>1.0</version>
     <name>ControlClientes</name>
     <description>HolaMundo con Spring</description>
@@ -19,6 +19,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>

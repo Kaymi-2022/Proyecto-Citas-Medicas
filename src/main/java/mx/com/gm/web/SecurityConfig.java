@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import mx.com.gm.controller.CustomAuthenticationSuccessHandler;
 
@@ -18,7 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -33,17 +33,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(requests -> requests
-                        .antMatchers("/home").permitAll()
-                        .antMatchers("/","/table-admin","/table-citados","/charts/**","/guardarPaciente/**", "/editar/**", "/agregar/**", "/eliminar/**")
-                        .hasAnyRole("ADMIN", "DOCTOR"))
+                        .antMatchers("/home", "/register", "/company/**", "/contact/**", "/blog/**", "/gallery/**",
+                                "/service/**", "/img/**", "/css/**", "/js/**")
+                        .permitAll()
+                        .antMatchers("/table-horarios/**", "/table-doctores/**", "/guardarMedico/**",
+                                "/table-principal/**", "/guardarConsultorio/**", "/table-citados", "/charts/**",
+                                "/guardarPaciente/**", "/editar/**", "/agregar/**", "/eliminar/**",
+                                "/guardarUsuario/**", "/guardarCita/**", "/guardarDoctor/**",
+                                "/eliminarUsuario/**", "/eliminarcitados/**", "/guardarPaciente/**",
+                                "/eliminarMedico/**")
+                        .hasRole("ADMIN")
+                        .antMatchers("/reservarCita/**", "/obtenerHorariosCalendario/**", "/plantillaCalendario/**",
+                                "/inicioCita/**", "/plantilla_Consultorios/**")
+                        .hasRole("PATIENT")
+                        .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
                         .permitAll()
-                        .successHandler(customAuthenticationSuccessHandler))
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureUrl("/login?error=true"))
                 .exceptionHandling(handling -> handling.accessDeniedPage("/errores/403"));
     }
 }
+

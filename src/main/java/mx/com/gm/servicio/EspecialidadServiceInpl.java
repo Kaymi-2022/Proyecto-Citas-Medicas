@@ -1,7 +1,7 @@
 package mx.com.gm.servicio;
 
 import mx.com.gm.domain.Especialidad;
-import mx.com.gm.repository.ConsultorioDao;
+import mx.com.gm.repository.EspecialidadDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,32 +9,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ConsultorioServiceInpl implements ConsultorioService {
+public class EspecialidadServiceInpl implements EspecialidadService {
     @Autowired
-    ConsultorioDao consultorioDao;
+    EspecialidadDao especialidadDao;
 
     @Override
     public void guardar(Especialidad especialidad) {
-        consultorioDao.save(especialidad);
+        especialidadDao.save(especialidad);
     }
 
     @Override
     public void eliminar(Especialidad especialidad) {
-        consultorioDao.delete(especialidad);
+        especialidadDao.delete(especialidad);
     }
 
     @Override
     public List<Especialidad> listarConsultorios() {
-        return consultorioDao.findAll();
+        return especialidadDao.findAll();
     }
 
     @Override
     public Especialidad encontrarConsultorio(Especialidad especialidad) {
-        return consultorioDao.findById(especialidad.getIdConsultorio()).orElse(null) ;
+        return especialidadDao.findById(especialidad.getIdConsultorio()).orElse(null) ;
     }
 
     @Override
     public Optional<Especialidad> obtenerConsultorioPorId(Long idConsultorio) {
-        return consultorioDao.findById(idConsultorio);
+        return especialidadDao.findById(idConsultorio);
     }
 }

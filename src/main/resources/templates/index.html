@@ -435,5 +435,65 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+<script>
+  // Añade el contenedor del chatbot al final del cuerpo del documento
+  const chatbotContainer = document.createElement('div');
+  chatbotContainer.id = 'chatbot';
+  chatbotContainer.style.position = 'fixed';
+  chatbotContainer.style.bottom = '20px';
+  chatbotContainer.style.right = '20px';
+  chatbotContainer.style.width = '300px';
+  chatbotContainer.style.border = '1px solid #ccc';
+  chatbotContainer.style.padding = '10px';
+  chatbotContainer.style.backgroundColor = '#f2f2f2'; // Color de fondo recomendado
+  chatbotContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+  chatbotContainer.style.borderRadius = '10px'; // Bordes redondeados
+  document.body.appendChild(chatbotContainer);
+
+  chatbotContainer.innerHTML = `
+      <iframe width="100%" height="200" src="https://www.youtube.com/embed/n8G0VvVfM-4?si=Y3iKj8hSTbpNIkN1" frameborder="0" allowfullscreen style="margin-bottom: 10px; border-radius: 10px;"></iframe>
+      <h3 style="color: #333;">Chatbot Hospital Luis Negreiros</h3>
+      <div id="chat" style="border: 1px solid #ddd; padding: 10px; height: 200px; overflow-y: scroll; margin-bottom: 10px; background-color: #fff; border-radius: 10px;"></div>
+      <div id="inputArea" style="display: flex;">
+          <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+          <button onclick="sendMessage()" style="padding: 10px; margin-left: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px;">Enviar</button>
+      </div>
+  `;
+
+  const chat = document.getElementById('chat');
+  let userName = '';
+
+  function sendMessage() {
+      const userInput = document.getElementById('userInput').value;
+      document.getElementById('userInput').value = '';
+
+      if (userName === '') {
+          userName = userInput;
+          addChatMessage(`Hola ${userName}, ¿deseas ver un video tutorial? Responde con "sí" o "no".`);
+      } else {
+          handleUserResponse(userInput.toLowerCase());
+      }
+  }
+
+  function addChatMessage(message) {
+      const messageElement = document.createElement('div');
+      messageElement.textContent = message;
+      chat.appendChild(messageElement);
+      chat.scrollTop = chat.scrollHeight;
+  }
+
+  function handleUserResponse(response) {
+      if (response === 'sí') {
+          addChatMessage(`Aquí tienes el video tutorial: <a href="https://www.youtube.com/watch?v=n8G0VvVfM-4" target="_blank">Ver Video</a>`);
+      } else if (response === 'no') {
+          addChatMessage(`Está bien, ${userName}. Si necesitas algo más, estoy aquí para ayudarte.`);
+      } else {
+          addChatMessage('Por favor responde con "sí" o "no".');
+      }
+  }
+
+  // Mensaje de bienvenida inicial
+  addChatMessage('Bienvenido a la web del Hospital Luis Negreiros. Por favor, escribe tu nombre:');
+</script>
 </body>
 </html>

@@ -97,7 +97,7 @@
   <script src="/js/js-login.js"></script>
   <script th:inline="javascript">
     /*<![CDATA[*/
-    var respuesta = /*[[${situacion}]]*/ "defaultValue";
+    var respuesta = /*[[${mensaje}]]*/ "defaultValue";
     console.log("Valor desde Thymeleaf:", respuesta);
     /*]]>*/
     if (respuesta == "error") {
@@ -124,6 +124,13 @@
         title: "Bienvenido!",
         text: "Registro exitoso!",
       });
+    }else{
+      Swal.fire({
+        icon: "info",
+        title: "Bienvenido!",
+        text: respuesta,
+      });
+
     }
 
   </script>

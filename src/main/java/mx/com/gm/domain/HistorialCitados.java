@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.Data;
 
 @Data
@@ -28,6 +27,12 @@ public class HistorialCitados {
     private String paciente;
 
     @NotEmpty
+    private String dni;
+
+    @NotEmpty
+    private String email;
+
+    @NotEmpty
     private String consultorio;
 
     @NotEmpty
@@ -41,6 +46,9 @@ public class HistorialCitados {
 
     @NotEmpty
     private String situacion;
+
+    @NotEmpty
+    private String idHorario;
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;

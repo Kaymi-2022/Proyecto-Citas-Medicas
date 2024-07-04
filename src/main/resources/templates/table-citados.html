@@ -41,66 +41,7 @@
         </ul>
     </nav>
     <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
-                    <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" th:href="@{/charts}">
-                            <div class="sb-nav-link-icon">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </div>
-                            Dashboard Citados
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Interface</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon">
-                                <i class="fas fa-columns"></i>
-                            </div>
-                            Layouts Admin
-                            <div class="sb-sidenav-collapse-arrow">
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" th:href="@{/table-principal}">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-table"></i>
-                                    </div>
-                                    Tables Admin
-                                </a>
-                                <a class="nav-link" th:href="@{/citados}">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-table"></i>
-                                    </div>
-                                    Tables Patient
-                                </a>
-                                <a class="nav-link">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-table"></i>
-                                    </div>
-                                    Tables Doctor
-                                </a>
-                            </nav>
-                        </div>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
-                        <a class="nav-link" th:href="@{/charts}">
-                            <div class="sb-nav-link-icon">
-                                <i class="fas fa-chart-area"></i>
-                            </div>
-                            Charts
-                        </a>
-                    </div>
-                </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    Administrador
-                </div>
-            </nav>
-        </div>
+        <div th:replace="layout/menuTablero :: menuTablero">Contenido menu Tablero</div>
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
@@ -115,59 +56,53 @@
                             <i class="fas fa-table me-1"></i>
                             DataTable Pacientes Citados
                         </div>
-                        <div class="card-body" th:if="${citas !=null and !citas.empty}">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>FECHA</th>
-                                        <th>PACIENTE</th>
-                                        <th>CONSULTORIO</th>
-                                        <th>MEDICO</th>
-                                        <th>ACTIVIDAD</th>
-                                        <th>HORA</th>
-                                        <th>SITUACION</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>FECHA</th>
-                                        <th>PACIENTE</th>
-                                        <th>CONSULTORIO</th>
-                                        <th>MEDICO</th>
-                                        <th>ACTIVIDAD</th>
-                                        <th>HORA</th>
-                                        <th>SITUACION</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr th:each="citas, contador : ${citas}">
-                                        <td>[[${citas.fecha}]]</td>
-                                        <td>[[${citas.paciente}]]</td>
-                                        <td>[[${citas.consultorio}]]</td>
-                                        <td>[[${citas.medico}]]</td>
-                                        <td>[[${citas.actividad}]]</td>
-                                        <td>[[${citas.hora}]]</td>
-                                        <td>[[${citas.situacion}]]</td>
-                                        <td>
-                                            <a href="#" class="btn btn-primary editBtn" data-bs-toggle="modal"
-                                                data-bs-target="#editUserModal"
-                                                th:attr="data-id=${citas.id}, data-fecha=${citas.fecha}, data-paciente=${citas.paciente}, data-consultorio=${citas.consultorio}, data-medico=${citas.medico}, data-actividad=${citas.actividad}, data-hora=${citas.hora}, data-situacion=${citas.situacion}">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </a>
-                                        </td>
-                                        <td class="position-absolute top-50 start-50 align-middle">
-                                            <a th:href="@{/eliminarCitado(id=${citas.id})}" type="button"
-                                                class="btn btn-danger">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="container" th:if="${citas !=null and !citas.empty}">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="datatablesSimple" class="table table-striped table-bordered"
+                                            cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>FECHA</th>
+                                                    <th>PACIENTE</th>
+                                                    <th>CONSULTORIO</th>
+                                                    <th>MEDICO</th>
+                                                    <th>ACTIVIDAD</th>
+                                                    <th>HORA</th>
+                                                    <th>SITUACION</th>
+                                                    <th>Editar</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="citas, contador : ${citas}">
+                                                    <td>[[${citas.fecha}]]</td>
+                                                    <td>[[${citas.paciente}]]</td>
+                                                    <td>[[${citas.especialidad}]]</td>
+                                                    <td>[[${citas.medico}]]</td>
+                                                    <td>[[${citas.actividad}]]</td>
+                                                    <td>[[${citas.hora}]]</td>
+                                                    <td>[[${citas.situacion}]]</td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-primary editBtn"
+                                                            data-bs-toggle="modal" data-bs-target="#editUserModal"
+                                                            th:attr="data-id=${citas.id}, data-fecha=${citas.fecha}, data-paciente=${citas.paciente}, data-especialidad=${citas.especialidad}, data-medico=${citas.medico}, data-actividad=${citas.actividad}, data-hora=${citas.hora}, data-situacion=${citas.situacion}">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/eliminarCitado(id=${citas.id})}" type="button"
+                                                            class="btn btn-danger">
+                                                            <i class="fa-solid fa-trash-can"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Modal -->
@@ -201,13 +136,13 @@
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="editConsultorio" class="form-label">Consultorio</label>
-                                                    <input type="text" class="form-control" id="consultorio"
-                                                        name="consultorio" required>
+                                                    <input type="text" class="form-control" id="especialidad"
+                                                        name="especialidad" required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="editMedico" class="form-label">Medico</label>
-                                                    <input type="text" class="form-control" id="medico"
-                                                        name="medico" required>
+                                                    <input type="text" class="form-control" id="medico" name="medico"
+                                                        required>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -266,7 +201,23 @@
     <script src="/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
+    <!-- jQuery, Popper.js, Bootstrap JS -->
+    <script src="jquery/jquery-3.3.1.min.js"></script>
+    <script src="popper/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- datatables JS -->
+    <script type="text/javascript" src="/datatables/datatables.min.js"></script>
+
+    <!-- para usar botones en datatables JS -->
+    <script src="/datatables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="/datatables/JSZip-2.5.0/jszip.min.js"></script>
+    <script src="/datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
+    <script src="/datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+    <script src="/datatables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
+    <script src="/js/llenardatos-medico.js"></script>
     <script src="/js/datatables-simple-demo.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         var resp = /*[[${situacion}]]*/ "defaultValue";

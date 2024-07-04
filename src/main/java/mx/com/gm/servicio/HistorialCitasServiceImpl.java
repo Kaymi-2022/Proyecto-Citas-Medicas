@@ -54,6 +54,10 @@ public class HistorialCitasServiceImpl implements HistorialCitasService {
                 .collect(Collectors.toList());
     }
 
+    public List<HistorialCitados> getHistorialCitas(String dni) {
+        return historialDao.findByDNI(dni);
+    }
+
     @Data
     @AllArgsConstructor
     public static class EspecialidadTotalDTO {
