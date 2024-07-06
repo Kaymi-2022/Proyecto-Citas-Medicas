@@ -37,9 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(requests -> requests
-                        .antMatchers("/home").permitAll()
-                        .antMatchers("/","/table-admin","/table-citados","/charts/**","/guardarPaciente/**", "/editar/**", "/agregar/**", "/eliminar/**")
-                        .hasAnyRole("ADMIN", "DOCTOR"))
+                .antMatchers("/","/home/**","/register","/company/**","/contact/**","/blog/**","/gallery/**","/service/**","/img/**","/css/**", "/js/**").permitAll()
+                    .antMatchers("/css/**", "/js/**", "/img/**", "/fonts/**", "/scss/**", "/vendor/**", "/webjars/**").permitAll()
+                    .antMatchers("/table-horarios/**", "/table-doctores/**", "/guardarMedico/**", "/table-principal/**", "/guardarConsultorio/**", "/table-citados/**", "/charts/**", "/guardarPaciente/**", "/editar/**", "/agregar/**", "/eliminar/**", "/guardarUsuario/**", "/guardarCita/**", "/guardarDoctor/**", "/eliminarUsuario/**", "/eliminarcitados/**").hasRole("ADMIN")
+                    .antMatchers("/obtenerHorariosCalendario/**", "/plantillaCalendario/**", "/inicioCita/**", "/plantilla_Consultorios/**").hasRole("PATIENT")
+                    .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
                         .permitAll()

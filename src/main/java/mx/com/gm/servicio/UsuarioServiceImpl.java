@@ -3,10 +3,12 @@ package mx.com.gm.servicio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import mx.com.gm.domain.Rol;
 import mx.com.gm.domain.Usuario;
-import mx.com.gm.repository.RolRepository;
+import mx.com.gm.repository.RolDao;
 import mx.com.gm.repository.UsuarioDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,10 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
 
     @Autowired
-    public UsuarioDao usuarioDao;
+    private UsuarioDao usuarioDao;
 
     @Autowired
-    private RolRepository rolRepository;
+    private RolDao rolDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,8 +37,7 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
             throw new UsernameNotFoundException(username);
         }
 
-        var roles = new ArrayList<GrantedAuthority>();
-
+        List<GrantedAuthority> roles = new ArrayList<>();
         for (Rol rol : usuario.getRoles()) {
             roles.add(new SimpleGrantedAuthority(rol.getNombre()));
         }
@@ -68,28 +69,20 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
         return usuarioDao.findById(usuario.getId_usuario()).orElse(null);
     }
 
-    public long countUsersWithAdminRole(String rol) {
-        return usuarioDao.countByRoleName(rol);
-    }
-
     @Transactional
     public Usuario registrarUsuario(Usuario usuario) {
-        // Asegúrate de que el rol "ROLE_PATIENT" existe o créalo si no existe
-        Optional<Rol> rolPacienteOpt = rolRepository.findByNombre("ROLE_PATIENT");
+        Optional<Rol> rolPacienteOpt = rolDao.findByNombre("ROLE_PATIENT");
         Rol rolPaciente;
-        
+
         if (rolPacienteOpt.isEmpty()) {
             rolPaciente = new Rol();
             rolPaciente.setNombre("ROLE_PATIENT");
-            rolPaciente = rolRepository.save(rolPaciente);
+            rolPaciente = rolDao.save(rolPaciente);
         } else {
             rolPaciente = rolPacienteOpt.get();
         }
-        
-        // Asigna el rol "ROLE_PATIENT" al nuevo usuario
-        usuario.addRole(rolPaciente);
 
-        // Guarda el usuario en la base de datos
+        usuario.addRole(rolPaciente);
         return usuarioDao.save(usuario);
     }
 
@@ -98,8 +91,12 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
         usuarioDao.deleteById(idUsuario);
     }
 
+    public long countUsersWithAdminRole(String rol) {
+        return usuarioDao.countByRoleName(rol);
+    }
+
     public List<Object[]> findAllUsersWithRoleNames() {
         return usuarioDao.findAllUsersWithRoleNames();
     }
-    
 }
+

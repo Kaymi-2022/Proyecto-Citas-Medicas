@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.persistence.*;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,24 +41,24 @@ public class Usuario implements Serializable {
     @NotEmpty
     private String celular;
 
-    @ManyToMany
-    @JoinTable(
-        name = "usuario_rol",
-        joinColumns = @JoinColumn(name = "id_usuario"),
-        inverseJoinColumns = @JoinColumn(name = "id_rol")
-    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_rol"))
     @EqualsAndHashCode.Exclude
     private Set<Rol> roles = new HashSet<>();
+
 
     // Método conveniente para añadir un rol
     public void addRole(Rol rol) {
         this.roles.add(rol);
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Usuario usuario = (Usuario) o;
         return Objects.equals(id_usuario, usuario.id_usuario);
     }

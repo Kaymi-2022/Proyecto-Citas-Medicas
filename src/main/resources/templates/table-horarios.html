@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - SB Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" th:href="@{/charts}">Dashboard Hospital</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i class="fas fa-bars"></i>
+        </button>
+        <!-- Navbar-->
+        <ul sec:authorize="isAuthenticated()"
+            class="navbar-nav d-none d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fas fa-user fa-fw"></i>
+                    <span th:text="#{barra.bienvenido}">Bievenido:</span>
+                    <span sec:authentication="name">Usuario</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li>
+                        <form method="POST" th:action="@{/logout}">
+                            <a href="#" onclick="this.parentNode.submit();" class="dropdown-item">Salir</a>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <!-- Sidebar-->
+        <div th:replace="layout/plantillaHeaderHome :: headerDashboard"></div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#editUserModal">AGREGAR
+                    </button>
+                    <br>
+                    <br>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            DataTable Control Horarios
+                        </div>
+                        <div class="card-body" th:if="${horarios != null and !horarios.empty}">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Dia</th>
+                                        <th>Horario</th>
+                                        <th>Estado</th>
+                                        <th>Nombre Medico</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Dia</th>
+                                        <th>Horario</th>
+                                        <th>Estado</th>
+                                        <th>Nombre Medico</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr th:each="horario: ${horarios}">
+                                        <td th:text="${horario.id}"></td>
+                                        <td th:text="${horario.dia}"></td>
+                                        <td th:text="${horario.time}"></td>
+                                        <td th:text="${horario.idestadoCita.estado}"></td>
+                                        <td th:text="${horario.medicos.nombre}"></td>
+                                        <td class="position-absolute top-50 start-50 align-middle">
+                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#editUserModal" th:attr="
+                                                data-id=${horario.id},
+                                                data-username=${horario.dia},
+                                                data-nombre=${horario.time},
+                                                data-apellido=${horario.idestadoCita.estado},
+                                                data-dni=${horario.medicos.nombre}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        </td>
+                                        <td class="position-absolute top-50 start-50 align-middle">
+                                            <a th:href="@{/eliminarHorario(id=${horario.id})}" type="button"
+                                                class="btn btn-danger">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Modal para editar usuario -->
+                        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5>Editar Horario</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form th:action="@{/guardarHorario}" th:object="${horario}" method="post"
+                                            class="was-validated">
+                                            <input type="hidden" id="id" name="id" required />
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="dia" class="form-label">Dia</label>
+                                                    <input type="date" class="form-control" id="dia" name="dia"
+                                                        required />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="time" class="form-label">Hora</label>
+                                                    <input type="time" class="form-control" id="time" name="time"
+                                                        required />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <label for="idestadoCita">Estado Cita:</label>
+                                                    <select class="form-control" id="idestadoCita" name="idestadoCita"
+                                                        required>
+                                                        <option th:each="estadoCita : ${estadosCita}"
+                                                            th:value="${estadoCita.idestadoCita}"
+                                                            th:text="${estadoCita.estado}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="medicos">Medico</label>
+                                                    <select class="form-control" id="medicos" name="medicos" required>
+                                                        <option th:each="medico : ${medicos}"
+                                                            th:value="${medico.idMedico}" th:text="${medico.nombre}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modal para eliminar usuario-->
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2024</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div></div>
+    <!--     <script>
+    // Mostrar mensaje de alerta si existe en el modelo
+    window.onload = function () {
+      var mensaje = /*${mensaje}*/ "null";
+      if (mensaje !== "null" && mensaje !== "") {
+        alert(mensaje);
+      }
+    };
+  </script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/js/scripts.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/js/datatables-simple-demo.js"></script>
+    <script src="/js/llenardatos-modal.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var resp = /*[[${situacion}]]*/ "defaultValue";
+        console.log("Valor desde Thymeleaf:", resp);
+        /*]]>*/
+        if (resp == "error") {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Transaccion con error!",
+            });
+        } else if (resp == "success") {
+            Swal.fire({
+                icon: "success",
+                title: "Correcto!",
+                text: "Transaccion exitoso!",
+            });
+        }
+    </script>
+</body>
+
+</html>
